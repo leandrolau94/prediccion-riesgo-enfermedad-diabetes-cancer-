@@ -45,7 +45,7 @@ y = df["outcome"] # variable objetivo
 # como la regresion logistica es sensible a escala y las variables no estan normalizadas, entonces
 # antes mejor normalizar siguiendo (score z) la distribucion normal [0, 1], asi son mas fiables los resultados
 scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=X.columns) # keep pandas dataset
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42) # 80% entrenamiento, 20% prueba
 
 model = LogisticRegression(max_iter=1000)
