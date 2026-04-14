@@ -27,7 +27,6 @@ Pima Indians Diabetes Dataset (datos médicos reales de pacientes)
 
 ### 3. Modelado
 - Regresión logística
-- Random Forest
 - Evaluación con métricas (accuracy, recall)
 
 ### 4. Interpretación
