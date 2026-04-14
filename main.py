@@ -62,3 +62,8 @@ print(classification_report(y_test, y_pred))
 feature_importance = pd.DataFrame({"feature": X.columns, "importance": model.coef_[0]})
 feature_importance = feature_importance.sort_values(by="importance", ascending=False)
 print(feature_importance)
+
+# visualización
+sns.barplot(x="importance", y="feature", data=feature_importance)
+plt.title("Importance of features (linear regression)")
+plt.show()
