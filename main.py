@@ -1,4 +1,7 @@
 import pandas as pd#libreria para cargar y leer datos csv
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
@@ -33,3 +36,19 @@ df.fillna(df.median(), inplace=True)
 
 # comprobar que se reemplazaron todos los Nan por las medianas de cada columna
 print(df.isnull().sum())
+
+# Aqui comienza la prediccion del modelo predictivo medico
+X = df.drop("outcome", axis=1) # variables independientes
+y = df["outcome"] # variable objetivo
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) # 80% entrenamiento, 20% prueba
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+# make predicitions
+y_pred = model.predict(X_test)
+
+# evaluation
+print("Precisión:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
