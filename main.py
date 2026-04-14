@@ -2,6 +2,7 @@ import pandas as pd#libreria para cargar y leer datos csv
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.preprocessing import StandardScaler
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
@@ -41,7 +42,11 @@ print(df.isnull().sum())
 X = df.drop("outcome", axis=1) # variables independientes
 y = df["outcome"] # variable objetivo
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42) # 80% entrenamiento, 20% prueba
+# como la regresion logistica es sensible a escala y las variables no estan normalizadas, entonces
+# antes mejor normalizar siguiendo (score z) la distribucion normal [0, 1], asi son mas fiables los resultados
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42) # 80% entrenamiento, 20% prueba
 
 model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
@@ -52,3 +57,8 @@ y_pred = model.predict(X_test)
 # evaluation
 print("Precisión:", accuracy_score(y_test, y_pred))
 print(classification_report(y_test, y_pred))
+
+# visualizar que factores influyen en la diabetes
+feature_importance = pd.DataFrame({"feature": X.columns, "importance": model.coef_[0]})
+feature_importance = feature_importance.sort_values(by="importance", ascending=False)
+print(feature_importance)
